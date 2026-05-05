@@ -1,883 +1,166 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mon Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0e0e11;
-      --surface: #18181f;
-      --surface2: #222230;
-      --text: #f0eee8;
-      --muted: #888;
-      --accent1: #ff6b6b;
-      --accent2: #ffd93d;
-      --accent3: #6bcb77;
-      --accent4: #4d96ff;
-      --accent5: #c77dff;
-      --border: rgba(255,255,255,0.08);
-      --radius: 16px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* NOISE OVERLAY */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 4rem;
-      background: rgba(14,14,17,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.3rem;
-      background: linear-gradient(90deg, var(--accent1), var(--accent4));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    /* HERO */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-blobs {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.18;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .blob-1 { width: 500px; height: 500px; background: var(--accent1); top: -100px; left: -100px; animation-delay: 0s; }
-    .blob-2 { width: 400px; height: 400px; background: var(--accent4); top: 50%; right: -100px; animation-delay: -3s; }
-    .blob-3 { width: 350px; height: 350px; background: var(--accent5); bottom: -80px; left: 30%; animation-delay: -6s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.05); }
-    }
-
-    .hero-tag {
-      display: inline-block;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 0.4rem 1.2rem;
-      font-size: 0.8rem;
-      color: var(--accent3);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-
-    h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
-    }
-
-    .h1-line { display: block; }
-    .h1-accent { color: var(--accent2); }
-
-    .hero-desc {
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.8rem;
-      border-radius: 100px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
-      border: none;
-    }
-
-    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-    .btn-primary { background: var(--text); color: var(--bg); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-
-    /* SCROLL INDICATOR */
-    .scroll-hint {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--muted);
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    .scroll-arrow { font-size: 1.2rem; }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
-    }
-
-    /* SECTIONS */
-    section {
-      padding: 6rem 4rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
-    }
-
-    h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      margin-bottom: 3rem;
-    }
-
-    /* GALLERY */
-    #gallery {
-      padding-top: 8rem;
-    }
-
-    .gallery-filters {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 2.5rem;
-    }
-
-    .filter-btn {
-      padding: 0.4rem 1.2rem;
-      border-radius: 100px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    .card-thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-thumb-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, var(--surface) 100%);
-    }
-
-    .card-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .card-body { padding: 1.2rem 1.4rem 1.4rem; }
-
-    .card-tag {
-      display: inline-block;
-      padding: 0.2rem 0.8rem;
-      border-radius: 100px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 0.6rem;
-    }
-
-    .tag-game { background: rgba(107,203,119,0.15); color: var(--accent3); }
-    .tag-video { background: rgba(77,150,255,0.15); color: var(--accent4); }
-    .tag-html { background: rgba(255,107,107,0.15); color: var(--accent1); }
-    .tag-pdf { background: rgba(255,217,61,0.15); color: var(--accent2); }
-
-    .card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-
-    .card-desc {
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    /* SPECIFIC SECTIONS */
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
-      margin: 0 4rem;
-      width: calc(100% - 8rem);
-    }
-
-    /* JEUX */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .game-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .game-card:hover { transform: translateY(-4px); border-color: rgba(107,203,119,0.4); }
-
-    .game-thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-    }
-
-    .game-info { padding: 1.2rem 1.4rem 1.4rem; }
-
-    .game-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-    }
-
-    .game-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem; }
-
-    .game-links { display: flex; gap: 0.75rem; }
-
-    .game-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.5rem 1.1rem;
-      border-radius: 100px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.2s;
-      border: 1px solid var(--border);
-      color: var(--text);
-      background: var(--surface2);
-    }
-
-    .game-link:hover { opacity: 0.8; transform: translateY(-1px); }
-    .game-link.primary { background: var(--accent3); color: #0e1a0f; border-color: var(--accent3); }
-
-    /* VIDEOS */
-    .videos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .video-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .video-card:hover { transform: translateY(-4px); border-color: rgba(77,150,255,0.4); }
-
-    .video-embed {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #000;
-    }
-
-    .video-embed iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .video-placeholder {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: var(--surface2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    .video-placeholder-icon { font-size: 2.5rem; }
-
-    .video-info { padding: 1rem 1.2rem 1.2rem; }
-    .video-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
-
-    /* HTML PAGES */
-    .html-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .html-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.2rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .html-item:hover { transform: translateX(4px); border-color: rgba(255,107,107,0.4); }
-
-    .html-icon {
-      width: 44px; height: 44px;
-      border-radius: 10px;
-      background: rgba(255,107,107,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .html-item-info { flex: 1; min-width: 0; }
-    .html-item-title { font-weight: 500; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .html-item-sub { font-size: 0.8rem; color: var(--muted); }
-
-    /* PDFS */
-    .pdf-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-
-    .pdf-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.2rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .pdf-item:hover { transform: translateX(4px); border-color: rgba(255,217,61,0.4); }
-
-    .pdf-icon {
-      width: 44px; height: 44px;
-      border-radius: 10px;
-      background: rgba(255,217,61,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .pdf-info { flex: 1; min-width: 0; }
-    .pdf-title { font-weight: 500; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pdf-sub { font-size: 0.8rem; color: var(--muted); }
-
-    /* A PROPOS */
-    #about {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      padding: 6rem 4rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .about-avatar {
-      aspect-ratio: 1;
-      border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      max-width: 360px;
-    }
-
-    .about-text h2 { margin-bottom: 1rem; }
-    .about-text p { color: var(--muted); margin-bottom: 1rem; }
-
-    .skills-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .skill-chip {
-      padding: 0.3rem 0.9rem;
-      border-radius: 100px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 3rem;
-      color: var(--muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--border);
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      section { padding: 4rem 1.5rem; }
-      #about { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
-      .about-avatar { max-width: 200px; font-size: 3rem; }
-      .section-divider { margin: 0 1.5rem; width: calc(100% - 3rem); }
-    }
-
-    /* FADE IN ANIMATION */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Portfolio</title>
+    <style>
+        /* CSS Styles */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #9B1A0A; /* Matching your itch.io embed red */
+            --hover-color: #ff4d4d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #000;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: #888;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Game Section */
+        .featured-game {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .featured-game h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+
+        .embed-container {
+            position: relative;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Making the embed look good on mobile */
+        @media (max-width: 700px) {
+            iframe {
+                width: 100%;
+                height: 300px;
+            }
+        }
+
+        .description {
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+    </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#hero" class="nav-logo">[ PORTFOLIO ]</a>
-    <ul class="nav-links">
-      <li><a href="#gallery">Galerie</a></li>
-      <li><a href="#games">Jeux</a></li>
-      <li><a href="#videos">Vidéos</a></li>
-      <li><a href="#pages">Pages HTML</a></li>
-      <li><a href="#pdfs">PDFs</a></li>
-      <li><a href="#about">À propos</a></li>
-    </ul>
-  </nav>
+    <header>
+        <h1>YOUR NAME</h1>
+        <p>Game Developer & Designer</p>
+    </header>
 
-  <!-- HERO -->
-  <div id="hero">
-    <div class="hero-blobs">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
-      <div class="blob blob-3"></div>
-    </div>
-    <span class="hero-tag">✦ Portfolio créatif</span>
-    <h1>
-      <span class="h1-line">Bonjour, je suis</span>
-      <span class="h1-line h1-accent">Ton Nom ici</span>
-    </h1>
-    <p class="hero-desc">
-      Développeur créatif — jeux vidéo, expériences web, et bien plus. Bienvenue dans mon univers.
-    </p>
-    <div class="hero-cta">
-      <a href="#gallery" class="btn btn-primary">Voir mes projets →</a>
-      <a href="#about" class="btn btn-outline">À propos</a>
-    </div>
-    <div class="scroll-hint">
-      <span class="scroll-arrow">↓</span>
-      <span>DÉFILER</span>
-    </div>
-  </div>
+    <div class="container">
+        
+        <!-- Featured Game Section -->
+        <section class="featured-game">
+            <h2>Featured Project: One of Them Killed Me</h2>
+            
+            <div class="embed-container">
+                <!-- Your itch.io Embed -->
+                <iframe frameborder="0" src="https://itch.io/embed-upload/14535248?color=9B1A0A" allowfullscreen="" width="640" height="380">
+                    <a href="https://gesla.itch.io/one-of-them-killed-me">Play One of Them Killed Me on itch.io</a>
+                </iframe>
+            </div>
 
-  <!-- GALERIE GLOBALE -->
-  <section id="gallery" class="fade-in">
-    <p class="section-label">✦ Tous les projets</p>
-    <h2>Galerie complète</h2>
-
-    <div class="gallery-filters">
-      <button class="filter-btn active" data-filter="all">Tout</button>
-      <button class="filter-btn" data-filter="game">Jeux</button>
-      <button class="filter-btn" data-filter="video">Vidéos</button>
-      <button class="filter-btn" data-filter="html">Pages HTML</button>
-      <button class="filter-btn" data-filter="pdf">PDFs</button>
-    </div>
-
-    <div class="gallery-grid" id="gallery-grid">
-
-      <!-- EXEMPLE jeu -->
-      <a href="#games" class="project-card" data-type="game">
-        <div class="card-thumb">🎮</div>
-        <div class="card-body">
-          <span class="card-tag tag-game">Jeu Godot</span>
-          <p class="card-title">Nom du jeu 1</p>
-          <p class="card-desc">Courte description du jeu. Remplace par tes vraies infos.</p>
-        </div>
-      </a>
-
-      <!-- EXEMPLE vidéo -->
-      <a href="#videos" class="project-card" data-type="video">
-        <div class="card-thumb">▶</div>
-        <div class="card-body">
-          <span class="card-tag tag-video">Vidéo</span>
-          <p class="card-title">Titre de la vidéo</p>
-          <p class="card-desc">Description de ta vidéo. Remplace par tes vraies infos.</p>
-        </div>
-      </a>
-
-      <!-- EXEMPLE HTML -->
-      <a href="#pages" class="project-card" data-type="html">
-        <div class="card-thumb">🌐</div>
-        <div class="card-body">
-          <span class="card-tag tag-html">Page HTML</span>
-          <p class="card-title">Nom de la page</p>
-          <p class="card-desc">Description de ta page web. Remplace par tes vraies infos.</p>
-        </div>
-      </a>
-
-      <!-- EXEMPLE PDF -->
-      <a href="#pdfs" class="project-card" data-type="pdf">
-        <div class="card-thumb">📄</div>
-        <div class="card-body">
-          <span class="card-tag tag-pdf">PDF</span>
-          <p class="card-title">Nom du document</p>
-          <p class="card-desc">Description du PDF. Remplace par tes vraies infos.</p>
-        </div>
-      </a>
+            <div class="description">
+                <h3>About the Game</h3>
+                <p>
+                    Enter a brief description of your game here. What is the genre? 
+                    What was your role? Mention key features or the engine used (Unity, Godot, etc.).
+                </p>
+                <a href="https://gesla.itch.io/one-of-them-killed-me" class="btn" target="_blank">View on Itch.io</a>
+            </div>
+        </section>
 
     </div>
-  </section>
 
-  <hr class="section-divider" />
-
-  <!-- JEUX -->
-  <section id="games" class="fade-in">
-    <p class="section-label">✦ Godot Engine</p>
-    <h2>Jeux vidéo</h2>
-    <div class="games-grid">
-
-      <div class="game-card">
-        <div class="game-thumb">🎮</div>
-        <div class="game-info">
-          <p class="game-title">Nom du jeu 1</p>
-          <p class="game-desc">Description du jeu — genre, gameplay, ce que tu as appris en le faisant.</p>
-          <div class="game-links">
-            <a href="games/jeu1/index.html" class="game-link primary">▶ Jouer</a>
-            <a href="https://github.com/tonpseudo/jeu1" class="game-link">GitHub</a>
-          </div>
+    <footer>
+        <div class="social-links">
+            <a href="#">Itch.io</a> | 
+            <a href="#">Twitter</a> | 
+            <a href="#">GitHub</a> | 
+            <a href="mailto:your@email.com">Contact</a>
         </div>
-      </div>
-
-      <div class="game-card">
-        <div class="game-thumb">🕹️</div>
-        <div class="game-info">
-          <p class="game-title">Nom du jeu 2</p>
-          <p class="game-desc">Description du jeu — genre, gameplay, ce que tu as appris en le faisant.</p>
-          <div class="game-links">
-            <a href="games/jeu2/index.html" class="game-link primary">▶ Jouer</a>
-            <a href="https://github.com/tonpseudo/jeu2" class="game-link">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- VIDÉOS -->
-  <section id="videos" class="fade-in">
-    <p class="section-label">✦ YouTube embed</p>
-    <h2>Vidéos</h2>
-    <div class="videos-grid">
-
-      <div class="video-card">
-        <!-- Remplace SRC par ton lien YouTube embed : https://www.youtube.com/embed/IDENTIFIANT -->
-        <div class="video-placeholder">
-          <span class="video-placeholder-icon">▶</span>
-          <span>Colle ici ton embed YouTube</span>
-        </div>
-        <!-- Une fois que tu as l'ID YouTube, remplace le div ci-dessus par :
-        <div class="video-embed">
-          <iframe src="https://www.youtube.com/embed/TON_ID" allowfullscreen></iframe>
-        </div>
-        -->
-        <div class="video-info">
-          <p class="video-title">Titre de la vidéo</p>
-        </div>
-      </div>
-
-      <div class="video-card">
-        <div class="video-placeholder">
-          <span class="video-placeholder-icon">▶</span>
-          <span>Colle ici ton embed YouTube</span>
-        </div>
-        <div class="video-info">
-          <p class="video-title">Titre de la vidéo 2</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- PAGES HTML -->
-  <section id="pages" class="fade-in">
-    <p class="section-label">✦ Web</p>
-    <h2>Pages HTML</h2>
-    <div class="html-list">
-
-      <a href="pages/exemple.html" class="html-item">
-        <div class="html-icon">🌐</div>
-        <div class="html-item-info">
-          <p class="html-item-title">Nom de la page</p>
-          <p class="html-item-sub">Courte description</p>
-        </div>
-        <span style="color:var(--muted)">→</span>
-      </a>
-
-      <a href="pages/exemple2.html" class="html-item">
-        <div class="html-icon">✨</div>
-        <div class="html-item-info">
-          <p class="html-item-title">Autre page</p>
-          <p class="html-item-sub">Courte description</p>
-        </div>
-        <span style="color:var(--muted)">→</span>
-      </a>
-
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- PDFs -->
-  <section id="pdfs" class="fade-in">
-    <p class="section-label">✦ Documents</p>
-    <h2>PDFs</h2>
-    <div class="pdf-list">
-
-      <a href="pdfs/document.pdf" class="pdf-item" target="_blank">
-        <div class="pdf-icon">📄</div>
-        <div class="pdf-info">
-          <p class="pdf-title">Nom du document</p>
-          <p class="pdf-sub">Description courte</p>
-        </div>
-        <span style="color:var(--muted)">↓</span>
-      </a>
-
-      <a href="pdfs/document2.pdf" class="pdf-item" target="_blank">
-        <div class="pdf-icon">📋</div>
-        <div class="pdf-info">
-          <p class="pdf-title">Autre document</p>
-          <p class="pdf-sub">Description courte</p>
-        </div>
-        <span style="color:var(--muted)">↓</span>
-      </a>
-
-    </div>
-  </section>
-
-  <hr class="section-divider" />
-
-  <!-- À PROPOS -->
-  <div id="about">
-    <div class="about-avatar fade-in">🙂</div>
-    <div class="about-text fade-in">
-      <p class="section-label">✦ Qui suis-je</p>
-      <h2>À propos</h2>
-      <p>Bonjour ! Je suis [ton prénom], développeur créatif passionné par les jeux vidéo, le web et les expériences interactives.</p>
-      <p>Je travaille principalement avec Godot Engine pour créer des jeux, et j'aime aussi expérimenter avec HTML/CSS/JS pour construire des expériences web originales.</p>
-      <div class="skills-chips">
-        <span class="skill-chip">Godot Engine</span>
-        <span class="skill-chip">GDScript</span>
-        <span class="skill-chip">HTML / CSS</span>
-        <span class="skill-chip">JavaScript</span>
-        <span class="skill-chip">Game Design</span>
-        <span class="skill-chip">À compléter…</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>Fait à la main avec ♥ — <a href="https://github.com/tonpseudo" style="color:var(--muted)">GitHub</a></p>
-  </footer>
-
-  <script>
-    // FADE IN ON SCROLL
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // GALLERY FILTER
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('#gallery-grid .project-card');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        cards.forEach(card => {
-          const type = card.dataset.type;
-          card.style.display = (filter === 'all' || type === filter) ? 'block' : 'none';
-        });
-      });
-    });
-  </script>
+        <p>&copy; 2023 Your Name. All rights reserved.</p>
+    </footer>
 
 </body>
 </html>
